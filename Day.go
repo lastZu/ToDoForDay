@@ -14,10 +14,12 @@ type task struct {
 }
 
 var todos []task
+var commands []string
 
 func main() {
+	commands = append(commands, "add", "list", "delete", "done", "quit")
 	for {
-		fmt.Println("Enter a command (add, list, delete, done, quit):")
+		askComand()
 		input := bufio.NewScanner(os.Stdin)
 		input.Scan()
 		command := strings.Fields(input.Text())
@@ -69,4 +71,10 @@ func main() {
 			fmt.Println("Unknown command. Please try again.")
 		}
 	}
+}
+
+func askComand() {
+	enter := "Enter a command (%s):\n"
+	allCommand := strings.Join(commands, ", ")
+	fmt.Printf(enter, allCommand)
 }
