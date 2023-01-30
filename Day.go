@@ -20,9 +20,7 @@ func main() {
 	commands = append(commands, "add", "list", "delete", "done", "quit")
 	for {
 		askComand()
-		input := bufio.NewScanner(os.Stdin)
-		input.Scan()
-		command := strings.Fields(input.Text())
+		command := scanCommand()
 
 		switch command[0] {
 		case "add":
@@ -77,4 +75,11 @@ func askComand() {
 	enter := "Enter a command (%s):\n"
 	allCommand := strings.Join(commands, ", ")
 	fmt.Printf(enter, allCommand)
+}
+
+func scanCommand() []string {
+	input := bufio.NewScanner(os.Stdin)
+	input.Scan()
+	command := strings.Fields(input.Text())
+	return command
 }
