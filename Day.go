@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -24,47 +23,15 @@ func main() {
 
 		switch command[0] {
 		case "add":
-			if len(command) > 1 {
-				todos = append(todos, task{description: strings.Join(command[1:], " "), completed: false})
-				fmt.Println("Task added.")
-			} else {
-				fmt.Println("Please enter a task description.")
-			}
+			todos = add(todos, command)
 		case "list":
-			for i, todo := range todos {
-				if todo.completed {
-					fmt.Printf("%d. [Done] %s\n", i+1, todo.description)
-				} else {
-					fmt.Printf("%d. %s\n", i+1, todo.description)
-				}
-			}
+			showList(todos)
 		case "delete":
-			if len(command) > 1 {
-				index, err := strconv.Atoi(command[1])
-				if err != nil || index < 1 || index > len(todos) {
-					fmt.Println("Invalid task number.")
-				} else {
-					todos = append(todos[:index-1], todos[index:]...)
-					fmt.Println("Task deleted.")
-				}
-			} else {
-				fmt.Println("Please enter a task number.")
-			}
+			todos = delete(todos, command)
 		case "done":
-			if len(command) > 1 {
-				index, err := strconv.Atoi(command[1])
-				if err != nil || index < 1 || index > len(todos) {
-					fmt.Println("Invalid task number.")
-				} else {
-					todos[index-1].completed = true
-					fmt.Printf("Task %d completed.\n", index)
-				}
-			} else {
-				fmt.Println("Please enter a task number.")
-			}
+			done(todos, command)
 		case "quit":
-			fmt.Println("Goodbye!")
-			os.Exit(0)
+			quit()
 		default:
 			fmt.Println("Unknown command. Please try again.")
 		}
