@@ -18,12 +18,13 @@ func add(todos []task, command []string) []task {
 }
 
 func showList(todos []task) {
+	taskView := "%d.%s %s\n"
 	for i, todo := range todos {
+		done := ""
 		if todo.completed {
-			fmt.Printf("%d. [Done] %s\n", i+1, todo.description)
-		} else {
-			fmt.Printf("%d. %s\n", i+1, todo.description)
+			done = " [Done]"
 		}
+		fmt.Printf(taskView, i+1, done, todo.description)
 	}
 }
 
