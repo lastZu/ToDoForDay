@@ -37,7 +37,7 @@ func add(todos []task, command []string) []task {
 func showList(todos []task, command []string) []task {
 	taskView := "%d. [%s] %s\n"
 	for i, todo := range todos {
-		done := ""
+		done := " "
 		if todo.completed {
 			done = "X"
 		}
