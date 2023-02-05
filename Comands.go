@@ -7,6 +7,23 @@ import (
 	"strings"
 )
 
+type task struct {
+	description string
+	completed   bool
+}
+
+type operation func(todos []task, command []string) []task
+
+func commandInitialize() map[string]operation {
+	return map[string]operation{
+		"add":    add,
+		"list":   showList,
+		"delete": delete,
+		"done":   done,
+		"quit":   quit,
+	}
+}
+
 func add(todos []task, command []string) []task {
 	if len(command) > 1 {
 		todos = append(todos, task{description: strings.Join(command[1:], " "), completed: false})
@@ -17,7 +34,7 @@ func add(todos []task, command []string) []task {
 	return todos
 }
 
-func showList(todos []task) {
+func showList(todos []task, command []string) []task {
 	taskView := "%d. [%s] %s\n"
 	for i, todo := range todos {
 		done := ""
@@ -26,6 +43,7 @@ func showList(todos []task) {
 		}
 		fmt.Printf(taskView, i+1, done, todo.description)
 	}
+	return todos
 }
 
 func delete(todos []task, command []string) []task {
@@ -43,7 +61,7 @@ func delete(todos []task, command []string) []task {
 	return todos
 }
 
-func done(todos []task, command []string) {
+func done(todos []task, command []string) []task {
 	if len(command) > 1 {
 		index, err := strconv.Atoi(command[1])
 		if err != nil || index < 1 || index > len(todos) {
@@ -55,9 +73,11 @@ func done(todos []task, command []string) {
 	} else {
 		fmt.Println("Please enter a task number.")
 	}
+	return todos
 }
 
-func quit() {
+func quit(todos []task, command []string) []task {
 	fmt.Println("Goodbye!")
 	os.Exit(0)
+	return todos
 }
