@@ -25,12 +25,16 @@ func commandInitialize() map[string]operation {
 }
 
 func add(todos []task, command []string) []task {
+	ansver := "Please enter a task description."
 	if len(command) > 1 {
-		todos = append(todos, task{description: strings.Join(command[1:], " "), completed: false})
-		fmt.Println("Task added.")
-	} else {
-		fmt.Println("Please enter a task description.")
+		newTask := task{
+			description: strings.Join(command[1:], " "),
+			completed:   false,
+		}
+		todos = append(todos, newTask)
+		ansver = "Task added."
 	}
+	fmt.Println(ansver)
 	return todos
 }
 
@@ -62,17 +66,19 @@ func delete(todos []task, command []string) []task {
 }
 
 func done(todos []task, command []string) []task {
+	answer := "Please enter a task number."
+
 	if len(command) > 1 {
+		answer = "Invalid task number."
+
 		index, err := strconv.Atoi(command[1])
-		if err != nil || index < 1 || index > len(todos) {
-			fmt.Println("Invalid task number.")
-		} else {
+		goodIndex := index >= 1 || index <= len(todos)
+		if err == nil && goodIndex {
+			answer = fmt.Sprintf("Task %d completed.", index)
 			todos[index-1].completed = true
-			fmt.Printf("Task %d completed.\n", index)
 		}
-	} else {
-		fmt.Println("Please enter a task number.")
 	}
+	fmt.Println(answer)
 	return todos
 }
 
