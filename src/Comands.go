@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"fmt"
@@ -7,38 +7,38 @@ import (
 	"strings"
 )
 
-type task struct {
+type Task struct {
 	description string
 	completed   bool
 }
 
-type operation func(todos []task, command []string) []task
+type Operation func(todos []Task, command []string) []Task
 
-func commandInitialize() map[string]operation {
-	return map[string]operation{
-		"add":    add,
-		"list":   showList,
-		"delete": delete,
-		"done":   done,
-		"quit":   quit,
+func Initialize() map[string]Operation {
+	return map[string]Operation{
+		"add":    Add,
+		"list":   ShowList,
+		"delete": Delete,
+		"done":   Done,
+		"quit":   Quit,
 	}
 }
 
-func add(todos []task, command []string) []task {
-	ansver := "Please enter a task description."
+func Add(todos []Task, command []string) []Task {
+	answer := "Please enter a task description."
 	if len(command) > 1 {
-		newTask := task{
+		newTask := Task{
 			description: strings.Join(command[1:], " "),
 			completed:   false,
 		}
 		todos = append(todos, newTask)
-		ansver = "Task added."
+		answer = "Task added."
 	}
-	fmt.Println(ansver)
+	fmt.Println(answer)
 	return todos
 }
 
-func showList(todos []task, command []string) []task {
+func ShowList(todos []Task, command []string) []Task {
 	taskView := "%d. [%s] %s\n"
 	for i, todo := range todos {
 		done := " "
@@ -50,7 +50,7 @@ func showList(todos []task, command []string) []task {
 	return todos
 }
 
-func delete(todos []task, command []string) []task {
+func Delete(todos []Task, command []string) []Task {
 	if len(command) > 1 {
 		index, err := strconv.Atoi(command[1])
 		if err != nil || index < 1 || index > len(todos) {
@@ -65,7 +65,7 @@ func delete(todos []task, command []string) []task {
 	return todos
 }
 
-func done(todos []task, command []string) []task {
+func Done(todos []Task, command []string) []Task {
 	answer := "Please enter a task number."
 
 	if len(command) > 1 {
@@ -82,7 +82,7 @@ func done(todos []task, command []string) []task {
 	return todos
 }
 
-func quit(todos []task, command []string) []task {
+func Quit(todos []Task, command []string) []Task {
 	fmt.Println("Goodbye!")
 	os.Exit(0)
 	return todos
