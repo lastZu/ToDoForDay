@@ -1,26 +1,21 @@
 package main
 
 import (
+	"ToDoDay/src"
 	"bufio"
 	"fmt"
 	"os"
 	"strings"
-
-	"src.command"
-
-	"github.com/c-bata/go-prompt"
 )
 
-var todos []command.Task
+var todos []src.Task
 
 func main() {
-	commands := command.Initialize()
+	commands := src.Initialize()
 	question := questionToUser(commands)
 	for {
-		result := prompt.Input(question, completer)
-		fmt.Println()
+		fmt.Println(question)
 		userText := scanCommand()
-		userText = append(userText, result)
 		command := userText[0]
 		operator := commands[command]
 		if operator == nil {
@@ -31,7 +26,7 @@ func main() {
 	}
 }
 
-func questionToUser(commandsList map[string]command.Operation) string {
+func questionToUser(commandsList map[string]src.Operation) string {
 	var names []string
 	for name := range commandsList {
 		names = append(names, name)
@@ -46,13 +41,4 @@ func scanCommand() []string {
 	input.Scan()
 	command := strings.Fields(input.Text())
 	return command
-}
-
-func completer(d prompt.Document) []prompt.Suggest {
-	s := []prompt.Suggest{
-		{Text: "users", Description: "Store the username and age"},
-		{Text: "articles", Description: "Store the article text posted by user"},
-		{Text: "comments", Description: "Store the text commented to articles"},
-	}
-	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
 }
